@@ -17,7 +17,7 @@ using namespace std;
 enum RETVAL { NOT_IMPLEMENTED = -100, BAD_INPUT = -200};
 
 #if STAGE6 == true
-// Pity system for Gaacha Games
+// Pity system for Gaacha Games 121212
 // The seed sets the pseudorandom number generator
 // You will then input the base percentage chance to hit a 5-star gatcha
 // You will then input how much pity (how much the chance goes up each miss) the player has
