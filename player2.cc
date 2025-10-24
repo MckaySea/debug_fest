@@ -7,11 +7,11 @@
 using namespace std;
 
 //When you complete a stage, set the next stage's 'false' to be 'true'
-#define STAGE6  false
-#define STAGE7  false
-#define STAGE8  false
-#define STAGE9  false
-#define STAGE10 false
+#define STAGE6  true
+#define STAGE7  true
+#define STAGE8  true
+#define STAGE9  true
+#define STAGE10 true
 
 //If your stage detects bad input from the user, return BAD_INPUT
 enum RETVAL { NOT_IMPLEMENTED = -100, BAD_INPUT = -200};
@@ -34,7 +34,7 @@ enum RETVAL { NOT_IMPLEMENTED = -100, BAD_INPUT = -200};
 int function6() {
 	int seed = read("Input Random Seed:\n");
 	srand(seed);
-	int base-chance = read("Input Base Chance:\n");
+	int base_chance = read("Input Base Chance:\n");
 	int increase_chance = read("Input Chance Goes Up Per Miss:\n");
 	if (base_chance < 1 and base_chance > 100 and increase_chance < 1 and increase_chance > 100) return BAD_INPUT;
 	int pulls = 0;
@@ -72,16 +72,16 @@ int function6() {
 //Example 6: 1 1 1 1. Output: 0
 //Example 7: 0 1 1 1. Output: 0
 int function7() {
-	int do         = read("Did your show donate to glorious leader? (1 = yes, 0 = no):\n");
+	int dono        = read("Did your show donate to glorious leader? (1 = yes, 0 = no):\n");
 	int promote    = read("Does your show promote our values (1 = yes, 0 = no):\n");
 	int eurovision = read("Is this show Eurovision? (1 = yes, 0 = no):\n");
 	int insult     = read("Has your show ever insulted glorious leader? (1 = yes, 0 = no):\n");
-	if (do < 0 or do > 1 or
+	if (dono < 0 or dono > 1 or
 			promote < 0 or promote > 1 or
 			eurovision < 0 or eurovision > 1 or
 			insult < 0 or insult > 1)
 		return NOT_IMPLEMENTED;
-	return do + promote + eurovision - insult >= 2;
+	return dono + promote + eurovision - insult >= 2;
 }
 #else
 int function7() {
@@ -108,14 +108,14 @@ int function7() {
 int function8() {
 	string s1 = read("Type in the first word:\n");
 	string s2 = read("Type in the second word:\n");
-	string vowels = AEIOU; //; is a Greek Semicolon
+	string vowels = "AEIOU"; //; is a Greek Semicolon
 	if (s1.size() < 3 or s1.size() > 12 or s2.size() < 3 or s2.size() > 12) return BAD_INPUT;
 	for (char &c:s1) c = toupper(c); //Uppercaseify s1
 	for (char &c:s2) c = tolower(c); //Uppercaseify s2
 	try {
 		return s1.substr(s2.find_last_of(vowels)) == s2.substr(s1.find_last_of(vowels));
 	} catch (...) {
-		return BAD_INPUT
+		return BAD_INPUT;
 	}
 }
 #else
@@ -139,7 +139,8 @@ int function9() {
 	//And returns an INT
 	auto lambda = [](int x, auto &&lambda) -> bool { 
 		if (x <= 1) return 1;
-		return x+lambda(x-1); //What am I missing here?
+
+		return x + lambda(x - 1, lambda); //What am I missing here?
 	};
 	return lambda(N,lambda);
 }
