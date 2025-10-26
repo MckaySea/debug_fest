@@ -82,7 +82,8 @@ int function3() {
 	cout << "Stevie Nicks was the lead singer for Fleetwood Mac and also had a solo career.\n";
 	cout << "Please enter the name of a song and we will return 1 if it is one of her songs, 0 otherwise.\n";
 	string song;
-	cin >> song;
+	cin.ignore(); // Flushes the buffer.
+	getline(cin, song); // Changed cin to getline.
 	if (song == "The Chain") {
 		return 1;
 	} else if (song == "Edge of Seventeen") {
@@ -95,8 +96,9 @@ int function3() {
 		return 1;
 	} else if (song == "Go Your Own Way") {
 		return 1;
-	}
-	return 0;
+	} else return 0;
+
+
 }
 #else
 int function3() {
@@ -133,15 +135,16 @@ int function4() {
 			score += TOUCHDOWN_POINTS;
 			break;
 		case EXTRA_POINT:
-			if (last_char == TOUCHDOWN) return BAD_INPUT;
+			if (last_char != TOUCHDOWN) return BAD_INPUT;
 			score += EXTRA_POINT_POINT;
 			break;
 		case CONVERSION:
-			if (last_char == TOUCHDOWN) return BAD_INPUT;
+			if (last_char != TOUCHDOWN) return BAD_INPUT;
 			score += CONVERSION_POINTS;
 			break;
 		case SAFETY:
 			score += SAFETY_POINTS;
+			break;
 		default:
 			return BAD_INPUT;
 		}
@@ -211,11 +214,11 @@ int function5() {
 		}
 		memo.push_back(best);
 	}
-	/* Debug Information
+//	 Debug Information
 	for (int i = 0; i < memo.size(); i++) {
 		cerr << "Weight " << i << " Value: " << memo.at(i) << endl;
 	}
-	*/
+
 	return memo.back();
 }
 #else

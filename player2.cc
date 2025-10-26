@@ -8,10 +8,10 @@ using namespace std;
 
 //When you complete a stage, set the next stage's 'false' to be 'true'
 #define STAGE6  true
-#define STAGE7  true
-#define STAGE8  true
-#define STAGE9  true
-#define STAGE10 true
+#define STAGE7  false
+#define STAGE8  false
+#define STAGE9  false
+#define STAGE10 false
 
 //If your stage detects bad input from the user, return BAD_INPUT
 enum RETVAL { NOT_IMPLEMENTED = -100, BAD_INPUT = -200};
@@ -76,10 +76,7 @@ int function7() {
 	int promote    = read("Does your show promote our values (1 = yes, 0 = no):\n");
 	int eurovision = read("Is this show Eurovision? (1 = yes, 0 = no):\n");
 	int insult     = read("Has your show ever insulted glorious leader? (1 = yes, 0 = no):\n");
-	if (dono < 0 or dono > 1 or
-			promote < 0 or promote > 1 or
-			eurovision < 0 or eurovision > 1 or
-			insult < 0 or insult > 1)
+	if ((dono < 0 or dono > 1) or (promote < 0 or promote > 1) or (eurovision < 0 or eurovision > 1) or (insult < 0 or insult > 1))
 		return NOT_IMPLEMENTED;
 	return dono + promote + eurovision - insult >= 2;
 }
@@ -183,7 +180,7 @@ int function9() {
 //Return value: 0
 
 int function10() {
-	vector<string> emoji = {"6️⃣7️⃣","⛵","🏴‍☠️","🦜","⚔️","🪢","🪙","🦪","⚫","🎩","🎤","🎶","😺"};
+	vector<string> emoji = {"6️⃣7️⃣", "⛵", "🏴‍☠️", "🦜", "⚔️", "🪢", "🪙", "🦪", "⚫", "🎩", "🎤", "🎶", "😺"};
 	const char *alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //C Style String
 	const char *consonants = "BCDFGHJKLMNPQRSTVWXYZ";
 	const char *vowels = "AEIOU";
