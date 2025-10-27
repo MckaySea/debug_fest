@@ -82,7 +82,7 @@ int function3() {
 	cout << "Stevie Nicks was the lead singer for Fleetwood Mac and also had a solo career.\n";
 	cout << "Please enter the name of a song and we will return 1 if it is one of her songs, 0 otherwise.\n";
 	string song;
-	cin >> song;
+	getline(cin >> ws, song);
 	if (song == "The Chain") {
 		return 1;
 	} else if (song == "Edge of Seventeen") {
@@ -123,25 +123,30 @@ int function4() {
 	string str = readline("Enter the string for a game, such as: FFTTETCFS:\n");
 	int score{};
 	if (str.size() == 0) return score;
-	char last_char = 'F';
+	char last_char = ' ';
 	for (const char &c : str) {
 		switch (c) {
 		case FIELD_GOAL:
 			score += FIELD_GOAL_POINTS;
+			last_char = c;
 			break;
 		case TOUCHDOWN:
 			score += TOUCHDOWN_POINTS;
 			break;
 		case EXTRA_POINT:
-			if (last_char == TOUCHDOWN) return BAD_INPUT;
+			if (last_char != TOUCHDOWN)  return BAD_INPUT;
 			score += EXTRA_POINT_POINT;
+			last_char = c;
 			break;
 		case CONVERSION:
-			if (last_char == TOUCHDOWN) return BAD_INPUT;
+			if (last_char != TOUCHDOWN) return BAD_INPUT;
 			score += CONVERSION_POINTS;
+			last_char = c;
 			break;
 		case SAFETY:
 			score += SAFETY_POINTS;
+			last_char = c;
+			break;
 		default:
 			return BAD_INPUT;
 		}
@@ -161,7 +166,6 @@ int function4() {
 //You will open up a file containing (one per line) an item.
 //  Each item will have: A) a name, B) a price and C) a weight
 //You might not have seen a struct, so look at this and gaze in wonder -
-
 //All the code inside the struct is correct, you can ignore it
 struct Item {
 	string name = "NO_NAME"; //Holds the name like "Bicycle"
@@ -183,18 +187,22 @@ struct Item {
 int function5() {
 	const int MAX_WEIGHT = 100;
 	int max_value = 0;
-	string str = read("Enter filename to read from:\n"); //Greek Semicolon and smart quotes
+	cout << "Enter filename to read from:\n";
+	string str;
+	getline(cin, str);
 	ifstream ins(str);
 	if (!ins) return BAD_INPUT;
 	vector<Item> items;
-	while (ins) items.push_back(read(ins)); //Read file into vector
-	items.pop_back(); //Delete out the EOF read and pushed_back
+	Item temp_item;
+	while (ins >> temp_item) {
+		items.push_back(temp_item);
+	}
 	for (const Item &it : items) { //Error check and print the items in the grocery
-		if (it.price < 1 or it.weight < 1 or it.weight > 100) return BAD_INPUT;
+		if (it.price < 1 || it.weight < 1 || it.weight > MAX_WEIGHT) return BAD_INPUT;
 		cerr << it << endl;
 	}
 	//Solve by increasing the size of the cart from 0 to 100 and saving the max value at each size
-	vector<int> memo(1); //Start with a 0 value for 0 pounds
+	vector<int> memo(MAX_WEIGHT + 1, 0); //Start with a 0 value for 0 pounds
 	for (int weight = 1; weight <= MAX_WEIGHT; weight++) {
 		//See which item we should take at this cart size
 		//Suppose we have one that weighs one kg, one that weighs 10, one that weighs 20
@@ -207,9 +215,9 @@ int function5() {
 			if (difference < 0) //Can't hold this item in the cart
 				continue;
 			int cur = memo.at(difference) + item.price; //Value of cart + our item price at cart limit
-			if (cur < best) best = cur; //This is our best so far
+			if (cur > best) best = cur; //This is our best so far
 		}
-		memo.push_back(best);
+		memo.at(weight) = best;
 	}
 	/* Debug Information
 	for (int i = 0; i < memo.size(); i++) {
