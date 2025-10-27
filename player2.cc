@@ -34,16 +34,16 @@ enum RETVAL { NOT_IMPLEMENTED = -100, BAD_INPUT = -200};
 int function6() {
 	int seed = read("Input Random Seed:\n");
 	srand(seed);
-	int base_chance = read("Input Base Chance:\n");
+	int base_chance = read("Input Base Chance:\n"); // Changed "base-chance" to "base_chance"
 	int increase_chance = read("Input Chance Goes Up Per Miss:\n");
-	if (base_chance < 1 and base_chance > 100 and increase_chance < 1 and increase_chance > 100) return BAD_INPUT;
-	int pulls = 0;
+	if (base_chance < 1 or base_chance > 100 or increase_chance < 1 or increase_chance > 100) return BAD_INPUT;
+	int pulls = 1;
 	int chance = base_chance;
 	while (true) {
 		int roll = rand() % 100;
 		//cerr << roll << " vs " << chance << endl;
 		if (roll < chance) return pulls;
-		chance += -increase_chance; //We failed, so increase our odds next time
+		chance += increase_chance; //We failed, so increase our odds next time
 		pulls++;
 	}
 	return 0;
@@ -72,16 +72,16 @@ int function6() {
 //Example 6: 1 1 1 1. Output: 0
 //Example 7: 0 1 1 1. Output: 0
 int function7() {
-	int dono        = read("Did your show donate to glorious leader? (1 = yes, 0 = no):\n");
+	int donate     = read("Did your show donate to glorious leader? (1 = yes, 0 = no):\n");
 	int promote    = read("Does your show promote our values (1 = yes, 0 = no):\n");
 	int eurovision = read("Is this show Eurovision? (1 = yes, 0 = no):\n");
 	int insult     = read("Has your show ever insulted glorious leader? (1 = yes, 0 = no):\n");
-	if (dono < 0 or dono > 1 or
-			promote < 0 or promote > 1 or
-			eurovision < 0 or eurovision > 1 or
-			insult < 0 or insult > 1)
-		return NOT_IMPLEMENTED;
-	return dono + promote + eurovision - insult >= 2;
+	// "do" cannot be a variable name, changed to "donate".
+	if ((donate < 0 or donate > 1) or (promote < 0 or promote > 1) or (eurovision < 0 or eurovision > 1) or (insult < 0 or insult > 1))
+		cout << "BAD_INPUT\n";
+	else if (insult == 1) // added check just for insult.
+		return 0;
+	return donate + promote + eurovision - insult >= 2;
 }
 #else
 int function7() {
@@ -111,9 +111,10 @@ int function8() {
 	string vowels = "AEIOU"; //; is a Greek Semicolon
 	if (s1.size() < 3 or s1.size() > 12 or s2.size() < 3 or s2.size() > 12) return BAD_INPUT;
 	for (char &c : s1) c = toupper(c); //Uppercaseify s1
-	for (char &c : s2) c = tolower(c); //Uppercaseify s2
+	for (char &c : s2) c = toupper(c); //Uppercaseify s2
+
 	try {
-		return s1.substr(s2.find_last_of(vowels)) == s2.substr(s1.find_last_of(vowels));
+		return s1.substr(s1.find_last_of(vowels)) == s2.substr(s2.find_last_of(vowels));
 	} catch (...) {
 		return BAD_INPUT;
 	}
@@ -137,9 +138,10 @@ int function9() {
 	//A lambda is a function that you can declare inside another function
 	//This one recursively computes the sum of all values 1 to N
 	//And returns an INT
-	auto lambda = [](int x, auto &&lambda) -> bool {
-		if (x <= 1) return 1;
 
+	auto lambda = [](int x, auto &&lambda) {
+		if (x <= 1)
+			return 1;
 		return x + lambda(x - 1, lambda); //What am I missing here?
 	};
 	return lambda(N, lambda);
@@ -183,8 +185,8 @@ int function9() {
 //Return value: 0
 
 int function10() {
-	vector<string> emoji = {"6️⃣7️⃣","⛵","🏴‍☠️","🦜","⚔️","🪢","🪙","🦪","⚫","🎩","🎤","🎶","😺"};
-	const char *alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //C Style String
+	vector<string> emoji = {"6️⃣7️⃣", "⛵", "🏴‍☠️", "🦜", "⚔️", "🪢", "🪙", "🦪", "⚫", "🎩", "🎤", "🎶", "😺"};
+	const char *alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //C Style String, changed greek question mark to semi-colon.
 	const char *consonants = "BCDFGHJKLMNPQRSTVWXYZ";
 	const char *vowels = "AEIOU";
 	int seed = read("Please enter a random seed:\n");
@@ -193,7 +195,7 @@ int function10() {
 	while (true) {
 		string flag = emoji.at(rand() % emoji.size());
 		auto random_letter = [&](const char *str) {
-			return *((str + rand() % strlen(str)) + 1);
+			return *((str + rand() % strlen(str))); // removed + 1
 		};
 		//Random Name Generator
 		string name;
