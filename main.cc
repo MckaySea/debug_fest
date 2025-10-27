@@ -189,7 +189,7 @@ int function5() {
 	int max_value = 0;
 	cout << "Enter filename to read from:\n";
 	string str;
-	getline(cin, str);
+	getline(cin >> ws, str);
 	ifstream ins(str);
 	if (!ins) return BAD_INPUT;
 	vector<Item> items;
